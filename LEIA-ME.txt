@@ -1,0 +1,33 @@
+ESCALAPRO — PRIMEIRO PROTÓTIPO
+
+O que está pronto:
+- Interface responsiva para celular e computador.
+- Identidade visual azul-marinho e dourado.
+- Navegação entre Início, Minha escala e Administração.
+- Demonstração local de postos/funcionários.
+- Estrutura inicial SQL para Supabase multiempresa.
+- Manifesto e service worker para instalação como PWA.
+
+IMPORTANTE:
+Esta é uma primeira interface demonstrativa, NÃO é ainda um sistema online multiusuário.
+Os dados inseridos na tela de demonstração não são compartilhados nem salvos no Supabase.
+Não coloque dados pessoais reais até concluir a autenticação, o backend e os testes de segurança.
+
+PRÓXIMOS PASSOS
+1. Crie uma conta gratuita em supabase.com e um projeto.
+2. No painel do projeto, abra SQL Editor > New query.
+3. Abra supabase_schema.sql deste pacote, copie todo o conteúdo e execute.
+4. Não copie nem publique a chave service_role. A chave publishable/anon pode ser usada no navegador somente com RLS bem configurado.
+5. Em seguida, conectaremos a tela ao Supabase, implementaremos convite/cadastro de funcionários, criação de empresas e permissões.
+6. Publique o conteúdo do pacote em um repositório GitHub e conecte a um serviço de hospedagem estática compatível com uso comercial. Confira os termos do plano gratuito escolhido.
+
+MONETIZAÇÃO
+- Anúncios: integrar AdMob no app Android depois de ter tráfego e aprovação.
+- Web: verificar requisitos e elegibilidade do AdSense.
+- Assinaturas: implementar pagamentos e controle de acesso com provedor apropriado, termos, política de privacidade e regras fiscais.
+- Não conte com receita garantida; primeiro valide o produto com usuários reais.
+
+SEGURANÇA
+- RLS deve permanecer habilitado.
+- Nunca exponha service_role, senhas ou segredos no HTML.
+- Teste com duas empresas distintas para confirmar que uma não acessa os dados da outra.

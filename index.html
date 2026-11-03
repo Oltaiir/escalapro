@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#101d35"><link rel="manifest" href="manifest.json">
+<title>EscalaPro</title>
+<style>
+:root{--navy:#101d35;--navy2:#172b4d;--gold:#e5b84b;--bg:#f3f5f9;--ink:#172033;--muted:#68758b}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font:15px system-ui,-apple-system,Segoe UI,sans-serif;color:var(--ink)}
+header{background:linear-gradient(135deg,var(--navy),var(--navy2));color:white;padding:22px 18px 26px;border-bottom:4px solid var(--gold)}
+.wrap{max-width:1000px;margin:auto} .brand{display:flex;align-items:center;gap:12px}.logo{width:44px;height:44px;border:2px solid var(--gold);border-radius:13px;display:grid;place-items:center;color:var(--gold);font-weight:900;font-size:20px}
+h1{font-size:21px;margin:0}header p{margin:4px 0 0;color:#c9d3e3;font-size:13px}
+main{max-width:1000px;margin:20px auto;padding:0 14px}.notice{background:#fff8e6;border:1px solid #f0d58e;padding:12px 14px;border-radius:12px;color:#634b13;font-size:13px;margin-bottom:16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}.card{background:white;border:1px solid #e4e8ef;border-radius:16px;padding:17px;box-shadow:0 5px 18px #1627460a}
+.card h2{font-size:15px;margin:0 0 12px;color:var(--navy)}.big{font-size:25px;font-weight:800;color:var(--navy)}.muted{color:var(--muted);font-size:13px}
+label{display:block;font-size:13px;font-weight:650;margin:12px 0 5px}input,select{width:100%;padding:12px;border:1px solid #d7deea;border-radius:10px;background:#fff;font:inherit}
+button{border:0;border-radius:10px;padding:12px 15px;background:var(--navy);color:#fff;font-weight:700;cursor:pointer}button.gold{background:var(--gold);color:#241b08}button.ghost{background:#e9eef6;color:var(--navy)}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}
+.pill{display:inline-block;background:#f6edcf;color:#6e5314;border-radius:99px;padding:5px 9px;font-size:12px;font-weight:700}
+.list{display:grid;gap:8px}.person{display:flex;justify-content:space-between;gap:10px;border-bottom:1px solid #edf0f5;padding:9px 0}.person:last-child{border:0}
+footer{text-align:center;color:#8290a5;font-size:12px;padding:25px}
+.hidden{display:none}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}.tabs button{background:#e4eaf3;color:var(--navy)}.tabs button.active{background:var(--navy);color:white}
+@media(max-width:520px){header{padding:18px 14px}.big{font-size:22px}}
+</style></head>
+<body>
+<header><div class="wrap brand"><div class="logo">EP</div><div><h1>EscalaPro</h1><p>Sua escala organizada. Seu trabalho simplificado.</p></div></div></header>
+<main>
+<div class="notice"><b>Versão inicial de demonstração.</b> Os dados desta tela são exemplos e ficam apenas neste aparelho. Para compartilhar escalas entre usuários, configure o Supabase seguindo o LEIA-ME.</div>
+<div class="tabs"><button class="active" data-tab="inicio">Início</button><button data-tab="escala">Minha escala</button><button data-tab="admin">Administração</button></div>
+<section id="inicio" class="panel">
+<div class="grid">
+<div class="card"><div class="muted">Próximo turno</div><div class="big" id="nextShift">Aguardando escala</div><div class="muted">Consulte sua programação publicada.</div></div>
+<div class="card"><div class="muted">Equipe</div><div class="big">Minha equipe</div><div class="muted">Área de consulta do funcionário.</div></div>
+<div class="card"><div class="muted">Plano</div><div class="big">Gratuito</div><span class="pill">Premium em breve</span></div>
+</div>
+<div class="card" style="margin-top:14px"><h2>Bem-vindo ao EscalaPro</h2><p class="muted">Aqui você poderá consultar seus dias de trabalho, folgas e postos. O administrador publicará as alterações para toda a equipe.</p></div>
+</section>
+<section id="escala" class="panel hidden">
+<div class="card"><h2>Minha escala</h2><div class="muted">Exemplo ilustrativo — substitua pelos dados reais da sua equipe após configurar o banco.</div><div id="scheduleList" class="list" style="margin-top:12px"></div></div>
+</section>
+<section id="admin" class="panel hidden">
+<div class="card"><h2>Cadastro demonstrativo de posto</h2><p class="muted">Esta versão ainda não grava nem publica dados online.</p>
+<label for="post">Nome do posto</label><input id="post" placeholder="Ex.: Portaria">
+<label for="employee">Funcionário</label><input id="employee" placeholder="Ex.: João">
+<div class="actions"><button class="gold" id="addDemo">Adicionar à demonstração</button><button class="ghost" id="clearDemo">Limpar</button></div>
+<div id="demoList" class="list" style="margin-top:12px"></div>
+</div>
+</section>
+</main><footer>EscalaPro • Protótipo inicial</footer>
+<script>
+const tabs=[...document.querySelectorAll('[data-tab]')];
+tabs.forEach(b=>b.addEventListener('click',()=>{tabs.forEach(x=>x.classList.toggle('active',x===b));document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('hidden',p.id!==b.dataset.tab));}));
+const demo=[];
+function render(){document.getElementById('demoList').innerHTML=demo.map(x=>`<div class="person"><b>${escapeHtml(x.name)}</b><span class="pill">${escapeHtml(x.post)}</span></div>`).join('')||'<p class="muted">Nenhum registro demonstrativo.</p>'}
+function escapeHtml(s){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+document.getElementById('addDemo').onclick=()=>{let post=document.getElementById('post').value.trim(),name=document.getElementById('employee').value.trim();if(!post||!name){alert('Preencha funcionário e posto.');return;}demo.push({post,name});render();document.getElementById('post').value='';document.getElementById('employee').value='';};
+document.getElementById('clearDemo').onclick=()=>{demo.length=0;render();};
+const today=new Date();document.getElementById('scheduleList').innerHTML=[0,1,2,3,4].map(n=>{let d=new Date(today);d.setDate(d.getDate()+n);return `<div class="person"><span>${d.toLocaleDateString('pt-BR',{weekday:'short',day:'2-digit',month:'2-digit'})}</span><span class="pill">${n%2===0?'Exemplo: Trabalho':'Exemplo: Folga'}</span></div>`}).join('');
+if('serviceWorker'in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>{});
+</script></body></html>
